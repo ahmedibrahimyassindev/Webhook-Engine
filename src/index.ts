@@ -41,8 +41,8 @@ export { validateTransition, canTransition, isTerminalState } from './core/event
 export { NoOpVerifier } from './security/verifier.js';
 export { HmacVerifier } from './security/hmac-verifier.js';
 export type { HmacVerifierOptions } from './security/hmac-verifier.js';
-export { GitHubVerifier, StripeVerifier } from './security/presets.js';
-export type { StripeVerifierOptions } from './security/presets.js';
+export { GitHubVerifier, StripeVerifier, ShopifyVerifier, SvixVerifier } from './security/presets.js';
+export type { StripeVerifierOptions, SvixVerifierOptions } from './security/presets.js';
 export { computeHmac, timingSafeCompare } from './security/signature.js';
 export { ReplayProtection } from './security/replay-protection.js';
 export type { ReplayProtectionOptions } from './security/replay-protection.js';
@@ -81,3 +81,6 @@ export {
   WEBHOOK_ENGINE_OPTIONS,
 } from './integrations/nestjs/index.js';
 export type { NestWebhookModuleOptions } from './integrations/nestjs/index.js';
+
+// Testing utilities
+export { createMockWebhookEvent, simulateWebhook } from './testing/index.js';

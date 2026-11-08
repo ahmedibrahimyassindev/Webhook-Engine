@@ -1,38 +1,54 @@
 {
-  "name": "node-webhook-engine",
+  "name": "@ahmedyassin/node-webhook-engine",
   "version": "0.1.0",
   "description": "A framework-agnostic webhook ingestion and processing engine for Node.js applications.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "Readme.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js",
+      "default": "./dist/testing/index.js"
     },
     "./integrations/express": {
       "types": "./dist/integrations/express/index.d.ts",
       "import": "./dist/integrations/express/index.js",
-      "require": "./dist/integrations/express/index.cjs"
+      "default": "./dist/integrations/express/index.js"
     },
     "./integrations/fastify": {
       "types": "./dist/integrations/fastify/index.d.ts",
       "import": "./dist/integrations/fastify/index.js",
-      "require": "./dist/integrations/fastify/index.cjs"
+      "default": "./dist/integrations/fastify/index.js"
     },
     "./integrations/nestjs": {
       "types": "./dist/integrations/nestjs/index.d.ts",
       "import": "./dist/integrations/nestjs/index.js",
-      "require": "./dist/integrations/nestjs/index.cjs"
+      "default": "./dist/integrations/nestjs/index.js"
     }
   },
+  "sideEffects": false,
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run clean && npm run typecheck && npm test && npm run build",
     "test": "vitest run",
     "bench": "vitest bench --run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist"
   },
@@ -44,7 +60,15 @@
     "event-processing",
     "retry",
     "deduplication",
-    "idempotent"
+    "idempotent",
+    "stripe",
+    "github",
+    "postgres",
+    "redis",
+    "mysql",
+    "express",
+    "fastify",
+    "nestjs"
   ],
   "author": "",
   "license": "MIT",
@@ -53,9 +77,9 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "rimraf": "^6.0.0",
     "typescript": "^5.6.0",
-    "vitest": "^2.1.0",
-    "rimraf": "^6.0.0"
+    "vitest": "^2.1.0"
   }
 }
-

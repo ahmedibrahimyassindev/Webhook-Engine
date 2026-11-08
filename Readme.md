@@ -149,7 +149,7 @@ The engine separates webhook infrastructure concerns from application business l
 ## Installation
 
 ```bash
-npm install node-webhook-engine
+npm install @ahmedyassin/node-webhook-engine
 ```
 
 ## Quick Start
@@ -157,7 +157,7 @@ npm install node-webhook-engine
 The following example shows a minimal working setup using the built-in in-memory storage and a no-op verifier.
 
 ```typescript
-import { WebhookEngine, MemoryStorage, NoOpVerifier } from "node-webhook-engine";
+import { WebhookEngine, MemoryStorage, NoOpVerifier } from "@ahmedyassin/node-webhook-engine";
 
 const engine = new WebhookEngine({
     storage: new MemoryStorage(),

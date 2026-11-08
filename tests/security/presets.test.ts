@@ -3,7 +3,13 @@
 // ---------------------------------------------------------------------------
 
 import { describe, it, expect } from 'vitest';
-import { GitHubVerifier, StripeVerifier } from '../../src/security/presets.js';
+import { createHmac } from 'node:crypto';
+import {
+  GitHubVerifier,
+  StripeVerifier,
+  ShopifyVerifier,
+  SvixVerifier,
+} from '../../src/security/presets.js';
 import { computeHmac } from '../../src/security/signature.js';
 
 describe('GitHubVerifier', () => {
@@ -104,6 +110,71 @@ describe('StripeVerifier', () => {
 
     expect(result.verified).toBe(false);
     expect(result.reason).toBe('Signature mismatch');
+  });
+});
+
+describe('ShopifyVerifier', () => {
+  const secret = 'shpss_test_secret';
+  const verifier = new ShopifyVerifier(secret);
+
+  it('verifies a valid Shopify signature', async () => {
+    const rawBody = Buffer.from('{"order_id":999}');
+    const signature = createHmac('sha256', secret).update(rawBody).digest('base64');
+
+    const result = await verifier.verify({
+      headers: { 'x-shopify-hmac-sha256': signature },
+      rawBody,
+    });
+
+    expect(result.verified).toBe(true);
+  });
+
+  it('rejects an invalid Shopify signature', async () => {
+    const rawBody = Buffer.from('{"order_id":999}');
+
+    const result = await verifier.verify({
+      headers: { 'x-shopify-hmac-sha256': 'invalid-base64' },
+      rawBody,
+    });
+
+    expect(result.verified).toBe(false);
+  });
+});
+
+describe('SvixVerifier', () => {
+  const rawSecret = 'mfYfZxrwZgBfmjPPGagOhRuhunEdkzWu';
+  const secret = `whsec_${Buffer.from(rawSecret).toString('base64')}`;
+  const verifier = new SvixVerifier({ secret });
+
+  it('verifies a valid Svix signature', async () => {
+    const rawBody = Buffer.from('{"type":"user.created"}');
+    const id = 'msg_123';
+    const timestamp = Math.floor(Date.now() / 1000);
+    const toSign = Buffer.concat([Buffer.from(`${id}.${timestamp}.`), rawBody]);
+
+    const secretKey = Buffer.from(Buffer.from(rawSecret).toString('base64'), 'base64');
+    const signature = createHmac('sha256', secretKey).update(toSign).digest('base64');
+
+    const result = await verifier.verify({
+      headers: {
+        'webhook-id': id,
+        'webhook-timestamp': String(timestamp),
+        'webhook-signature': `v1,${signature}`,
+      },
+      rawBody,
+    });
+
+    expect(result.verified).toBe(true);
+  });
+
+  it('rejects missing Svix headers', async () => {
+    const result = await verifier.verify({
+      headers: {},
+      rawBody: Buffer.from('{}'),
+    });
+
+    expect(result.verified).toBe(false);
+    expect(result.reason).toContain('Missing required');
   });
 });
 
