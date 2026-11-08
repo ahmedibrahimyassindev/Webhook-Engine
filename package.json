@@ -1,0 +1,61 @@
+{
+  "name": "node-webhook-engine",
+  "version": "0.1.0",
+  "description": "A framework-agnostic webhook ingestion and processing engine for Node.js applications.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./integrations/express": {
+      "types": "./dist/integrations/express/index.d.ts",
+      "import": "./dist/integrations/express/index.js",
+      "require": "./dist/integrations/express/index.cjs"
+    },
+    "./integrations/fastify": {
+      "types": "./dist/integrations/fastify/index.d.ts",
+      "import": "./dist/integrations/fastify/index.js",
+      "require": "./dist/integrations/fastify/index.cjs"
+    },
+    "./integrations/nestjs": {
+      "types": "./dist/integrations/nestjs/index.d.ts",
+      "import": "./dist/integrations/nestjs/index.js",
+      "require": "./dist/integrations/nestjs/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "bench": "vitest bench --run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "webhook",
+    "webhook-engine",
+    "hmac",
+    "signature-verification",
+    "event-processing",
+    "retry",
+    "deduplication",
+    "idempotent"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "rimraf": "^6.0.0"
+  }
+}
+
